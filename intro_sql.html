@@ -372,11 +372,11 @@ arithmetic</a></li>
 <li><a href="#having"><code>HAVING</code></a></li>
 <li><a href="#case-when"><code>CASE WHEN</code></a></li>
 <li><a href="#aliasing">Aliasing</a></li>
+<li><a href="#joins">Joins</a></li>
+<li><a href="#table-names-and-aliases">Table Names and Aliases</a></li>
 <li><a href="#subqueries">Subqueries</a></li>
 <li><a href="#common-table-expressions-cte">Common table
 expressions</a></li>
-<li><a href="#joins">Joins</a></li>
-<li><a href="#table-names-and-aliases">Table Names and Aliases</a></li>
 <li><a href="#recap-and-resources-to-continue-learning">Recap and
 resources to continue learning</a></li>
 </ul>
@@ -489,7 +489,8 @@ particular columns (e.g., equals, greater than, less than).</p>
 FROM patients
 WHERE gender = &#39;M&#39;</code></pre>
 <p>Note that string (text) values in SQL are surrounded with single
-quotes.</p>
+quotes. This may vary across databases, but typically it’s safer to <a href="https://stackoverflow.com/questions/1992314/what-is-the-difference-between-single-and-double-quotes-in-sql">use
+single quotes for strings in SQL</a>.</p>
 <p>You can combine conditions together with <code>AND</code> and
 <code>OR</code>:</p>
 <pre class="sql"><code>SELECT *
@@ -752,55 +753,6 @@ FROM patients
 GROUP BY first_name
 ORDER BY patient_count DESC</code></pre>
 </div>
-<div id="subqueries" class="section level2">
-<h2>Subqueries</h2>
-<p>We can use the results of one query as values in another query. For
-example, we discussed above that this doesn’t work:</p>
-<pre class="sql"><code>SELECT *
-FROM patients
-WHERE height = MAX(height)</code></pre>
-<p>You can use a subquery:</p>
-<pre class="sql"><code>SELECT *
-FROM patients
-WHERE height = (SELECT MAX(HEIGHT) FROM patients)</code></pre>
-<p>The subquery is executed first, and then the result is used the
-broader query.</p>
-<p>We can also use subqueries with <code>IN</code>:</p>
-<pre class="sql"><code>SELECT first_name, last_name
-FROM patients
-WHERE patient_id IN (
-  SELECT patient_id
-  FROM admissions
-  WHERE admission_date BETWEEN &#39;2018-01-01&#39; AND &#39;2018-12-31&#39;
-)</code></pre>
-<p>But you can also do the above query by joining tables together, as we
-may learn later. (<code>IN</code> is an expensive operation, meaning it
-can take a long time to run in large databases.)</p>
-<div id="exercise-9" class="section level3">
-<h3>Exercise 9</h3>
-<p>Find the first_name and last_name of patients who have been attended
-by a cardiologist. (Hint: you may need to use more than two tables. The
-database schema is your friend!)</p>
-</div>
-</div>
-<div id="common-table-expressions-cte" class="section level2">
-<h2>Common Table Expressions (CTE)</h2>
-<p>CTE help simplify relatively complex queries. You can give a name to
-a result set and use that in a subsequent query. CTE can help make long
-subqueries more readable. They’re particularly useful if you’re using
-the same subquery multiple times.</p>
-<pre class="sql"><code>WITH patients_2018 AS (
-  SELECT patient_id
-  FROM admissions
-  WHERE admission_date BETWEEN &#39;2018-01-01&#39; AND &#39;2018-12-31&#39;
-  )
-  
-SELECT first_name, last_name
-FROM patients
-WHERE patient_id IN patients_2018</code></pre>
-<p>Please note that you can create several CTE by separating them with a
-comma.</p>
-</div>
 <div id="joins" class="section level2">
 <h2>Joins</h2>
 <p>Looking at the database schema, we can see that information is split
@@ -875,6 +827,55 @@ the same time: you get rows that are in both tables, plus rows from both
 tables that don’t match the other table. The syntax is the same as the
 other joins.</p>
 </div>
+</div>
+<div id="subqueries" class="section level2">
+<h2>Subqueries</h2>
+<p>We can use the results of one query as values in another query. For
+example, we discussed above that this doesn’t work:</p>
+<pre class="sql"><code>SELECT *
+FROM patients
+WHERE height = MAX(height)</code></pre>
+<p>You can use a subquery:</p>
+<pre class="sql"><code>SELECT *
+FROM patients
+WHERE height = (SELECT MAX(HEIGHT) FROM patients)</code></pre>
+<p>The subquery is executed first, and then the result is used the
+broader query.</p>
+<p>We can also use subqueries with <code>IN</code>:</p>
+<pre class="sql"><code>SELECT first_name, last_name
+FROM patients
+WHERE patient_id IN (
+  SELECT patient_id
+  FROM admissions
+  WHERE admission_date BETWEEN &#39;2018-01-01&#39; AND &#39;2018-12-31&#39;
+)</code></pre>
+<p>But you can also do the above query by joining tables together, as we
+may learn later. (<code>IN</code> is an expensive operation, meaning it
+can take a long time to run in large databases.)</p>
+<div id="exercise-9" class="section level3">
+<h3>Exercise 9</h3>
+<p>Find the first_name and last_name of patients who have been attended
+by a cardiologist. (Hint: you may need to use more than two tables. The
+database schema is your friend!)</p>
+</div>
+</div>
+<div id="common-table-expressions-cte" class="section level2">
+<h2>Common Table Expressions (CTE)</h2>
+<p>CTE help simplify relatively complex queries. You can give a name to
+a result set and use that in a subsequent query. CTE can help make long
+subqueries more readable. They’re particularly useful if you’re using
+the same subquery multiple times.</p>
+<pre class="sql"><code>WITH patients_2018 AS (
+  SELECT patient_id
+  FROM admissions
+  WHERE admission_date BETWEEN &#39;2018-01-01&#39; AND &#39;2018-12-31&#39;
+  )
+  
+SELECT first_name, last_name
+FROM patients
+WHERE patient_id IN patients_2018</code></pre>
+<p>Please note that you can create several CTE by separating them with a
+comma.</p>
 </div>
 <div id="recap-and-resources-to-continue-learning" class="section level2">
 <h2>Recap and resources to continue learning</h2>

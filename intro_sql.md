@@ -16,10 +16,10 @@
 * [`HAVING`](#having)
 * [`CASE WHEN`](#case-when)
 * [Aliasing](#aliasing)
-* [Subqueries](#subqueries)
-* [Common table expressions](#common-table-expressions-cte)
 * [Joins](#joins)
 * [Table Names and Aliases](#table-names-and-aliases)
+* [Subqueries](#subqueries)
+* [Common table expressions](#common-table-expressions-cte)
 * [Recap and resources to continue learning](#recap-and-resources-to-continue-learning)
 
 ## What is SQL?
@@ -121,7 +121,7 @@ FROM patients
 WHERE gender = 'M'
 ```
 
-Note that string (text) values in SQL are surrounded with single quotes.
+Note that string (text) values in SQL are surrounded with single quotes. This may vary across databases, but typically it's safer to [use single quotes for strings in SQL](https://stackoverflow.com/questions/1992314/what-is-the-difference-between-single-and-double-quotes-in-sql).
 
 You can combine conditions together with `AND` and `OR`:
 
@@ -399,61 +399,6 @@ GROUP BY first_name
 ORDER BY patient_count DESC
 ```
 
-## Subqueries
-
-We can use the results of one query as values in another query. For example, we discussed above that this doesn't work: 
-
-```sql
-SELECT *
-FROM patients
-WHERE height = MAX(height)
-```
-You can use a subquery:
-
-```sql
-SELECT *
-FROM patients
-WHERE height = (SELECT MAX(HEIGHT) FROM patients)
-```
-
-The subquery is executed first, and then the result is used the broader query.
-
-We can also use subqueries with `IN`:
-
-```sql
-SELECT first_name, last_name
-FROM patients
-WHERE patient_id IN (
-  SELECT patient_id
-  FROM admissions
-  WHERE admission_date BETWEEN '2018-01-01' AND '2018-12-31'
-)
-```
-
-But you can also do the above query by joining tables together, as we may learn later.  (`IN` is an expensive operation, meaning it can take a long time to run in large databases.)
-
-### Exercise 9
-
-Find the first\_name and last\_name of patients who have been attended by a cardiologist. (Hint: you may need to use more than two tables. The database schema is your friend!)
-
-## Common Table Expressions (CTE)
-
-CTE help simplify relatively complex queries. You can give a name to a result set and use that in a subsequent query. CTE can help make long subqueries more readable. They're particularly useful if you're using the same subquery multiple times.
-
-```sql
-WITH patients_2018 AS (
-  SELECT patient_id
-  FROM admissions
-  WHERE admission_date BETWEEN '2018-01-01' AND '2018-12-31'
-  )
-  
-SELECT first_name, last_name
-FROM patients
-WHERE patient_id IN patients_2018
-```
-
-Please note that you can create several CTE by separating them with a comma.
-
 ## Joins
 
 Looking at the database schema, we can see that information is split between four tables.  The lines between the tables show where there is a column in one table that is linked to a column in another table.  These are called foreign keys.  
@@ -519,6 +464,61 @@ Select the patient\_id of patients attended by a cardiologist.  Use a left join.
 ### `FULL OUTER JOIN`
 
 A `FULL OUTER JOIN` is like doing a left and right join at the same time: you get rows that are in both tables, plus rows from both tables that don't match the other table. The syntax is the same as the other joins.
+
+## Subqueries
+
+We can use the results of one query as values in another query. For example, we discussed above that this doesn't work: 
+
+```sql
+SELECT *
+FROM patients
+WHERE height = MAX(height)
+```
+You can use a subquery:
+
+```sql
+SELECT *
+FROM patients
+WHERE height = (SELECT MAX(HEIGHT) FROM patients)
+```
+
+The subquery is executed first, and then the result is used the broader query.
+
+We can also use subqueries with `IN`:
+
+```sql
+SELECT first_name, last_name
+FROM patients
+WHERE patient_id IN (
+  SELECT patient_id
+  FROM admissions
+  WHERE admission_date BETWEEN '2018-01-01' AND '2018-12-31'
+)
+```
+
+But you can also do the above query by joining tables together, as we may learn later.  (`IN` is an expensive operation, meaning it can take a long time to run in large databases.)
+
+### Exercise 9
+
+Find the first\_name and last\_name of patients who have been attended by a cardiologist. (Hint: you may need to use more than two tables. The database schema is your friend!)
+
+## Common Table Expressions (CTE)
+
+CTE help simplify relatively complex queries. You can give a name to a result set and use that in a subsequent query. CTE can help make long subqueries more readable. They're particularly useful if you're using the same subquery multiple times.
+
+```sql
+WITH patients_2018 AS (
+  SELECT patient_id
+  FROM admissions
+  WHERE admission_date BETWEEN '2018-01-01' AND '2018-12-31'
+  )
+  
+SELECT first_name, last_name
+FROM patients
+WHERE patient_id IN patients_2018
+```
+
+Please note that you can create several CTE by separating them with a comma.
 
 ## Recap and resources to continue learning
 
