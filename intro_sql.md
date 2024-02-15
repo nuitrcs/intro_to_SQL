@@ -365,7 +365,7 @@ Count the number of cities for each province\_id in the patients table.  Order t
 SELECT first_name, COUNT(*)
 FROM patients
 GROUP BY first_name
-having COUNT(*) < 40
+HAVING COUNT(*) < 40
 ORDER BY COUNT(*) DESC
 ```
 
