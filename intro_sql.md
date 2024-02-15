@@ -44,11 +44,11 @@ This is how you can comment your code in SQL:
 /* this is a comment; it can 
 span multiple lines */
 
-SELECT * FROM actor; /* this is also a comment */
+SELECT * FROM patients; /* this is also a comment */
 
 -- this is a single line comment
 
-SELECT * from actor; -- another single line comment
+SELECT * from patients; -- another single line comment
 ```
 
 ## `SELECT`
