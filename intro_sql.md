@@ -22,6 +22,7 @@
 * [Subqueries](#subqueries)
 * [Common table expressions](#common-table-expressions-cte)
 * [Recap and resources to continue learning](#recap-and-resources-to-continue-learning)
+* [Answers to the exercises](#answers-to-the-exercises)
 
 ## What is SQL?
 
@@ -360,7 +361,7 @@ ORDER BY COUNT(*) DESC;
 
 ### Exercise 7
 
-Count the number of cities for each province\_id in the patients table.  Order the results by `COUNT(\*)`.
+Count the number of cities for each province\_id in the patients table.  Order the results by `COUNT(city)`.
 
 ## `HAVING`
 
@@ -426,7 +427,7 @@ Note that both tables have a column called patient\_id.  We add the table name t
 
 We can also group by, order by, and use other where clause conditions on the joined tables.  
 
-### Exercise 10
+### Exercise 9
 
 a) Join the patients table to the province\_names table.
 b) Join the admissions table to the doctors table.
@@ -477,10 +478,10 @@ FROM patients p
 RIGHT JOIN admissions a ON p.patient_id = a.patient_id;
 ```
 
-### Exercise 11
+### Exercise 10
 
-a) Select the patient\_id of patients attended by a cardiologist.  Use a left join.
-b) Select the patient\_id of patients attended by a cardiologist.  Now use a right join.
+a) Select the patient\_id of patients attended by a cardiologist.
+b) Select the first and last name of patients who have been admitted, but don't have a diagnosis record.
 
 ### `FULL OUTER JOIN`
 
@@ -519,11 +520,11 @@ WHERE patient_id IN (
 );
 ```
 
-But you can also do the above query by joining tables together, as we may learn later.  (`IN` is an expensive operation, meaning it can take a long time to run in large databases.)
+But you can also do the above query by joining tables together.  (`IN` is an expensive operation, meaning it can take a long time to run in large databases.)
 
-### Exercise 9
+### Exercise 11
 
-Find the first\_name and last\_name of patients who have been attended by a cardiologist. (Hint: you may need to use more than two tables. The database schema is your friend!)
+Using subqueries, find the first\_name and last\_name of patients who have been attended by a cardiologist. (Hint: you may need to use more than two tables. The database schema is your friend!)
 
 ## Common Table Expressions (CTE)
 
@@ -548,3 +549,153 @@ Please note that you can create several CTE by separating them with a comma.
 This tutorial provided an introduction to SQL. While this is a good starting place, there are more things to learn! This tutorial draws from a longer [Introduction to databases workshop](https://github.com/nuitrcs/databases_workshop) taught by [Research Computing and Data Services at Northwestern University](https://www.it.northwestern.edu/departments/it-services-support/research/), as well as by this [resource guide](https://sites.northwestern.edu/researchcomputing/resource-guides/resource-guide-sql/). You can check them out to continue learning! 🧠💪
 
 One key aspect that this workshop didn't cover is how to connect to a database. We used [sql-practice.com](https://www.sql-practice.com/), which makes it very easy to run SQL in a web browser for an introductory workshop. But in research, you'll probably be connecting to a database from a programming language like R or Python. Here you can see [how to connect to a database using the `DBI` package in R](https://github.com/nuitrcs/databases_workshop/blob/master/r/r_databases.Rmd) and [how to connect to a database using the `psycopg2` package in Python](https://github.com/nuitrcs/databases_workshop/blob/master/python/postgresql_from_python.ipynb). If you are affiliated with Northwestern University and you run into a problem during your research, you can always [submit a consult request](https://services.northwestern.edu/TDClient/30/Portal/Requests/ServiceDet?ID=93).
+
+## Answers to the exercises
+
+### Exercise 1
+
+```sql
+SELECT first_name, last_name
+FROM patients;
+```
+
+### Exercise 2
+
+```sql
+SELECT gender, birth_date
+FROM patients
+LIMIT 10;
+```
+
+### Exercise 3
+
+a) 
+
+```sql
+SELECT *
+FROM patients
+WHERE city = 'Toronto';
+```
+
+b) 
+
+```sql
+SELECT *
+FROM patients
+WHERE city = 'Toronto' AND province_id <> 'ON';
+```
+
+c) 
+
+```sql
+SELECT *
+FROM patients
+WHERE first_name LIKE 'd%';
+```
+
+### Exercise 4
+
+```sql
+SELECT *
+FROM patients
+WHERE first_name IN ('John', 'Jack', 'Sam');
+```
+
+### Exercise 5
+
+```sql
+SELECT *
+FROM patients
+ORDER BY province_id, city;
+```
+
+### Exercise 6
+
+a) 
+
+```sql
+SELECT DISTINCT allergies
+FROM patients;
+```
+
+b) 
+
+If each row is one person:
+
+```sql
+SELECT COUNT(*)
+FROM patients
+WHERE allergies = 'Penicillin';
+```
+
+### Exercise 7
+
+```sql
+SELECT province_id, count(city)
+FROM patients
+GROUP BY province_id
+ORDER BY count(city);
+```
+
+### Exercise 8
+
+```sql
+SELECT province_id
+FROM patients
+group by province_id
+HAVING count(city) > 20;
+```
+
+### Exercise 9
+
+a)
+
+```sql
+SELECT *
+FROM patients 
+INNER JOIN province_names ON patients.province_id = province_names.province_id;
+```
+
+b)
+
+```sql
+SELECT *
+FROM admissions 
+INNER JOIN doctors ON admissions.attending_doctor_id = doctors.doctor_id;
+```
+
+### Exercise 10
+
+a)
+
+```sql
+SELECT a.patient_id
+FROM doctors d
+LEFT JOIN admissions a ON d.doctor_id = a.attending_doctor_id
+WHERE d.specialty = 'Cardiologist';
+```
+
+b)
+
+```sql
+SELECT p.first_name, p.last_name
+FROM admissions a
+RIGHT JOIN patients p ON a.patient_id = p.patient_id
+WHERE a.diagnosis IS NULL;
+```
+
+### Exercise 11
+
+```sql
+SELECT first_name, last_name
+FROM patients
+WHERE patient_id IN (
+  SELECT patient_id
+  FROM admissions
+  WHERE attending_doctor_id IN (
+    SELECT doctor_id
+    FROM doctors
+    WHERE specialty = 'Cardiologist'
+    )
+  );
+```

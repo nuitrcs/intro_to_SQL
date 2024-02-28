@@ -381,6 +381,8 @@ arithmetic</a></li>
 expressions</a></li>
 <li><a href="#recap-and-resources-to-continue-learning">Recap and
 resources to continue learning</a></li>
+<li><a href="#answers-to-the-exercises">Answers to the
+exercises</a></li>
 </ul>
 <div id="what-is-sql" class="section level2">
 <h2>What is SQL?</h2>
@@ -713,7 +715,7 @@ ORDER BY COUNT(*) DESC;</code></pre>
 <div id="exercise-7" class="section level3">
 <h3>Exercise 7</h3>
 <p>Count the number of cities for each province_id in the patients
-table. Order the results by <code>COUNT(\*)</code>.</p>
+table. Order the results by <code>COUNT(city)</code>.</p>
 </div>
 </div>
 <div id="having" class="section level2">
@@ -790,8 +792,8 @@ there’s ambiguity.</p>
 <p>We can also group by, order by, and use other where clause conditions
 on the joined tables.</p>
 </div>
-<div id="exercise-10" class="section level3">
-<h3>Exercise 10</h3>
+<div id="exercise-9" class="section level3">
+<h3>Exercise 9</h3>
 <ol style="list-style-type: lower-alpha">
 <li>Join the patients table to the province_names table.</li>
 <li>Join the admissions table to the doctors table.</li>
@@ -829,13 +831,12 @@ RIGHT JOIN patients p ON p.patient_id = a.patient_id;</code></pre>
 FROM patients p
 RIGHT JOIN admissions a ON p.patient_id = a.patient_id;</code></pre>
 </div>
-<div id="exercise-11" class="section level3">
-<h3>Exercise 11</h3>
+<div id="exercise-10" class="section level3">
+<h3>Exercise 10</h3>
 <ol style="list-style-type: lower-alpha">
-<li>Select the patient_id of patients attended by a cardiologist. Use a
-left join.</li>
-<li>Select the patient_id of patients attended by a cardiologist. Now
-use a right join.</li>
+<li>Select the patient_id of patients attended by a cardiologist.</li>
+<li>Select the first and last name of patients who have been admitted,
+but don’t have a diagnosis record.</li>
 </ol>
 </div>
 <div id="full-outer-join" class="section level3">
@@ -870,14 +871,14 @@ WHERE patient_id IN (
   FROM admissions
   WHERE admission_date BETWEEN &#39;2018-01-01&#39; AND &#39;2018-12-31&#39;
 );</code></pre>
-<p>But you can also do the above query by joining tables together, as we
-may learn later. (<code>IN</code> is an expensive operation, meaning it
-can take a long time to run in large databases.)</p>
-<div id="exercise-9" class="section level3">
-<h3>Exercise 9</h3>
-<p>Find the first_name and last_name of patients who have been attended
-by a cardiologist. (Hint: you may need to use more than two tables. The
-database schema is your friend!)</p>
+<p>But you can also do the above query by joining tables together.
+(<code>IN</code> is an expensive operation, meaning it can take a long
+time to run in large databases.)</p>
+<div id="exercise-11" class="section level3">
+<h3>Exercise 11</h3>
+<p>Using subqueries, find the first_name and last_name of patients who
+have been attended by a cardiologist. (Hint: you may need to use more
+than two tables. The database schema is your friend!)</p>
 </div>
 </div>
 <div id="common-table-expressions-cte" class="section level2">
@@ -918,6 +919,128 @@ to connect to a database using the <code>psycopg2</code> package in
 Python</a>. If you are affiliated with Northwestern University and you
 run into a problem during your research, you can always <a href="https://services.northwestern.edu/TDClient/30/Portal/Requests/ServiceDet?ID=93">submit
 a consult request</a>.</p>
+</div>
+<div id="answers-to-the-exercises" class="section level2">
+<h2>Answers to the exercises</h2>
+<div id="exercise-1-1" class="section level3">
+<h3>Exercise 1</h3>
+<pre class="sql"><code>SELECT first_name, last_name
+FROM patients;</code></pre>
+</div>
+<div id="exercise-2-1" class="section level3">
+<h3>Exercise 2</h3>
+<pre class="sql"><code>SELECT gender, birth_date
+FROM patients
+LIMIT 10;</code></pre>
+</div>
+<div id="exercise-3-1" class="section level3">
+<h3>Exercise 3</h3>
+<ol style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<pre class="sql"><code>SELECT *
+FROM patients
+WHERE city = &#39;Toronto&#39;;</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<pre class="sql"><code>SELECT *
+FROM patients
+WHERE city = &#39;Toronto&#39; AND province_id &lt;&gt; &#39;ON&#39;;</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<pre class="sql"><code>SELECT *
+FROM patients
+WHERE first_name LIKE &#39;d%&#39;;</code></pre>
+</div>
+<div id="exercise-4-1" class="section level3">
+<h3>Exercise 4</h3>
+<pre class="sql"><code>SELECT *
+FROM patients
+WHERE first_name IN (&#39;John&#39;, &#39;Jack&#39;, &#39;Sam&#39;);</code></pre>
+</div>
+<div id="exercise-5-1" class="section level3">
+<h3>Exercise 5</h3>
+<pre class="sql"><code>SELECT *
+FROM patients
+ORDER BY province_id, city;</code></pre>
+</div>
+<div id="exercise-6-1" class="section level3">
+<h3>Exercise 6</h3>
+<ol style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<pre class="sql"><code>SELECT DISTINCT allergies
+FROM patients;</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<p>If each row is one person:</p>
+<pre class="sql"><code>SELECT COUNT(*)
+FROM patients
+WHERE allergies = &#39;Penicillin&#39;;</code></pre>
+</div>
+<div id="exercise-7-1" class="section level3">
+<h3>Exercise 7</h3>
+<pre class="sql"><code>SELECT province_id, count(city)
+FROM patients
+GROUP BY province_id
+ORDER BY count(city);</code></pre>
+</div>
+<div id="exercise-8-1" class="section level3">
+<h3>Exercise 8</h3>
+<pre class="sql"><code>SELECT province_id
+FROM patients
+group by province_id
+HAVING count(city) &gt; 20;</code></pre>
+</div>
+<div id="exercise-9-1" class="section level3">
+<h3>Exercise 9</h3>
+<ol style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<pre class="sql"><code>SELECT *
+FROM patients 
+INNER JOIN province_names ON patients.province_id = province_names.province_id;</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<pre class="sql"><code>SELECT *
+FROM admissions 
+INNER JOIN doctors ON admissions.attending_doctor_id = doctors.doctor_id;</code></pre>
+</div>
+<div id="exercise-10-1" class="section level3">
+<h3>Exercise 10</h3>
+<ol style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<pre class="sql"><code>SELECT a.patient_id
+FROM doctors d
+LEFT JOIN admissions a ON d.doctor_id = a.attending_doctor_id
+WHERE d.specialty = &#39;Cardiologist&#39;;</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li></li>
+</ol>
+<pre class="sql"><code>SELECT p.first_name, p.last_name
+FROM admissions a
+RIGHT JOIN patients p ON a.patient_id = p.patient_id
+WHERE a.diagnosis IS NULL;</code></pre>
+</div>
+<div id="exercise-11-1" class="section level3">
+<h3>Exercise 11</h3>
+<pre class="sql"><code>SELECT first_name, last_name
+FROM patients
+WHERE patient_id IN (
+  SELECT patient_id
+  FROM admissions
+  WHERE attending_doctor_id IN (
+    SELECT doctor_id
+    FROM doctors
+    WHERE specialty = &#39;Cardiologist&#39;
+    )
+  );</code></pre>
+</div>
 </div>
 </div>
 
