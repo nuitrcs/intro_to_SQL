@@ -419,8 +419,8 @@ SELECT * FROM patients; /* this is also a comment */
 -- this is a single line comment
 
 SELECT * from patients; -- another single line comment</code></pre>
-<div id="exercise" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-1" class="section level3">
+<h3>Exercise 1</h3>
 <p>Take a look at the schema of the database. Think about a query that
 you would like to be able to make at the end of this workshop. Write
 down that query and the steps that you think you would need to take
@@ -453,8 +453,8 @@ allow for more that one statement to be executed in the same call. (With
 <a href="https://www.sql-practice.com/">sql-practice.com</a> we don’t
 have to worry about that.)</li>
 </ul>
-<div id="exercise-1" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-2" class="section level3">
+<h3>Exercise 2</h3>
 <p>Select the first_name and last_name columns from the patients
 table.</p>
 </div>
@@ -469,8 +469,8 @@ LIMIT 5;</code></pre>
 <p>The order of the rows is not random, but it is not guaranteed to be
 in any particular order by default either. Be careful about this when
 “looking at the data.”</p>
-<div id="exercise-2" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-3" class="section level3">
+<h3>Exercise 3</h3>
 <p>Select 10 rows from the patients table selecting the gender and
 birth_date columns.</p>
 </div>
@@ -484,8 +484,8 @@ set in a particular order, something we’ll get to later.</p>
 FROM patients
 LIMIT 5
 OFFSET 2;</code></pre>
-<div id="exercise-3" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-4" class="section level3">
+<h3>Exercise 4</h3>
 <p>Select 10 rows from the patients table selecting the gender and
 birth_date columns, but skipping the first 5 rows.</p>
 </div>
@@ -553,8 +553,8 @@ WHERE gender = &#39;M&#39; AND province_id = &#39;ON&#39;;</code></pre>
 </tr>
 </tbody>
 </table>
-<div id="exercise-4" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-5" class="section level3">
+<h3>Exercise 5</h3>
 <ol style="list-style-type: lower-alpha">
 <li><p>Select rows from the patients table where the city is
 Toronto.</p></li>
@@ -572,8 +572,8 @@ The endpoints are inclusive:</p>
 <pre class="sql"><code>SELECT *
 FROM patients
 WHERE birth_date BETWEEN &#39;1963-01-01&#39; AND &#39;2000-01-01&#39;;</code></pre>
-<div id="exercise-5" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-6" class="section level3">
+<h3>Exercise 6</h3>
 <p>Select all the columns from the patients database where the height is
 between 160 and 180.</p>
 </div>
@@ -585,8 +585,8 @@ otherwise join together with an <code>OR</code> statement:</p>
 <pre class="sql"><code>SELECT *
 FROM patients
 WHERE city IN (&#39;Barrie&#39;, &#39;Dundas&#39;, &#39;Hamilton&#39;);</code></pre>
-<div id="exercise-6" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-7" class="section level3">
+<h3>Exercise 7</h3>
 <p>Select rows from the patients table where the first name is John,
 Jack, or Sam using <code>IN</code>.</p>
 </div>
@@ -610,8 +610,8 @@ FROM patients
 WHERE allergies = NULL;</code></pre>
 <p>Keep in mind that <code>NULL</code> values are omitted from the
 results of comparison tests.</p>
-<div id="exercise-7" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-8" class="section level3">
+<h3>Exercise 8</h3>
 <p>Select all the columns for the patients table where the birth_date is
 null.</p>
 </div>
@@ -643,8 +643,8 @@ OFFSET 5;</code></pre>
 <pre class="sql"><code>SELECT *
 FROM patients
 ORDER BY height DESC, weight DESC;</code></pre>
-<div id="exercise-8" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-9" class="section level3">
+<h3>Exercise 9</h3>
 <p>Order the rows in patients by province_id and then by city.</p>
 </div>
 </div>
@@ -661,8 +661,8 @@ ORDER BY first_name;</code></pre>
 <pre class="sql"><code>SELECT DISTINCT first_name, last_name
 FROM patients
 ORDER BY first_name;</code></pre>
-<div id="exercise-9" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-10" class="section level3">
+<h3>Exercise 10</h3>
 <p>Using the admissions table, find the distinct dates where patients
 have been admitted.</p>
 </div>
@@ -708,8 +708,8 @@ FROM patients;</code></pre>
 including any with NULL in a column:</p>
 <pre class="sql"><code>SELECT COUNT(*)
 FROM patients;</code></pre>
-<div id="exercise-10" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-11" class="section level3">
+<h3>Exercise 11</h3>
 <ol style="list-style-type: lower-alpha">
 <li>What are the allergies present in the patients table?</li>
 <li>How many people in the patients table have an allergy to
@@ -734,8 +734,8 @@ ORDER BY COUNT(*) DESC;</code></pre>
 FROM patients
 GROUP BY first_name, last_name
 ORDER BY COUNT(*) DESC;</code></pre>
-<div id="exercise-11" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-12" class="section level3">
+<h3>Exercise 12</h3>
 <p>Count the number of cities for each province_id in the patients
 table. Order the results by <code>COUNT(city)</code>.</p>
 </div>
@@ -751,8 +751,8 @@ FROM patients
 GROUP BY first_name
 HAVING COUNT(*) &lt; 40
 ORDER BY COUNT(*) DESC;</code></pre>
-<div id="exercise-12" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-13" class="section level3">
+<h3>Exercise 13</h3>
 <p>Select the province_id from the patients table that have more than 20
 cities associated with them.</p>
 </div>
@@ -767,8 +767,8 @@ at the output.</p>
 FROM patients
 GROUP BY first_name
 ORDER BY patient_count DESC;</code></pre>
-<div id="exercise-13" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-14" class="section level3">
+<h3>Exercise 14</h3>
 <p>Using the patients table, find the number of patients by gender. Give
 the resulting column a descriptive title.</p>
 </div>
@@ -786,8 +786,8 @@ an <code>if</code> statement in other programming languages.</p>
         ELSE &#39;Tall&#39;
     END AS height_category
 FROM patients;</code></pre>
-<div id="exercise-14" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-15" class="section level3">
+<h3>Exercise 15</h3>
 <p>Select all columns from the table admissions. Add a column called
 admission_year that takes the value of either 2018 or 2019 depending on
 the value of the column admission_date.</p>
@@ -818,26 +818,26 @@ a consult request</a>.</p>
 </div>
 <div id="answers-to-the-exercises" class="section level2">
 <h2>Answers to the exercises</h2>
-<div id="exercise-15" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-2-1" class="section level3">
+<h3>Exercise 2</h3>
 <pre class="sql"><code>SELECT first_name, last_name
 FROM patients;</code></pre>
 </div>
-<div id="exercise-16" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-3-1" class="section level3">
+<h3>Exercise 3</h3>
 <pre class="sql"><code>SELECT gender, birth_date
 FROM patients
 LIMIT 10;</code></pre>
 </div>
-<div id="exercise-17" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-4-1" class="section level3">
+<h3>Exercise 4</h3>
 <pre class="sql"><code>SELECT gender, birth_date
 FROM patients
 LIMIT 10
 OFFSET 5;</code></pre>
 </div>
-<div id="exercise-18" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-5-1" class="section level3">
+<h3>Exercise 5</h3>
 <ol style="list-style-type: lower-alpha">
 <li></li>
 </ol>
@@ -857,37 +857,37 @@ WHERE city = &#39;Toronto&#39; AND province_id &lt;&gt; &#39;ON&#39;;</code></pr
 FROM patients
 WHERE first_name LIKE &#39;d%&#39;;</code></pre>
 </div>
-<div id="exercise-19" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-6-1" class="section level3">
+<h3>Exercise 6</h3>
 <pre class="sql"><code>SELECT *
 FROM patients
 WHERE height BETWEEN 160 AND 180;</code></pre>
 </div>
-<div id="exercise-20" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-7-1" class="section level3">
+<h3>Exercise 7</h3>
 <pre class="sql"><code>SELECT *
 FROM patients
 WHERE first_name IN (&#39;John&#39;, &#39;Jack&#39;, &#39;Sam&#39;);</code></pre>
 </div>
-<div id="exercise-21" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-8-1" class="section level3">
+<h3>Exercise 8</h3>
 <pre class="sql"><code>SELECT *
 FROM patients
 WHERE birth_date IS NULL;</code></pre>
 </div>
-<div id="exercise-22" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-9-1" class="section level3">
+<h3>Exercise 9</h3>
 <pre class="sql"><code>SELECT *
 FROM patients
 ORDER BY province_id, city;</code></pre>
 </div>
-<div id="exercise-23" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-10-1" class="section level3">
+<h3>Exercise 10</h3>
 <pre class="sql"><code>SELECT DISTINCT admission_date
 FROM admissions;</code></pre>
 </div>
-<div id="exercise-24" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-11-1" class="section level3">
+<h3>Exercise 11</h3>
 <ol style="list-style-type: lower-alpha">
 <li></li>
 </ol>
@@ -901,28 +901,28 @@ FROM patients;</code></pre>
 FROM patients
 WHERE allergies = &#39;Penicillin&#39;;</code></pre>
 </div>
-<div id="exercise-25" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-12-1" class="section level3">
+<h3>Exercise 12</h3>
 <pre class="sql"><code>SELECT province_id, count(city)
 FROM patients
 GROUP BY province_id
 ORDER BY count(city);</code></pre>
 </div>
-<div id="exercise-26" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-13-1" class="section level3">
+<h3>Exercise 13</h3>
 <pre class="sql"><code>SELECT province_id
 FROM patients
 group by province_id
 HAVING count(city) &gt; 20;</code></pre>
 </div>
-<div id="exercise-27" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-14-1" class="section level3">
+<h3>Exercise 14</h3>
 <pre class="sql"><code>SELECT gender, COUNT(gender) AS patient_count
 FROM patients
 GROUP BY gender;</code></pre>
 </div>
-<div id="exercise-28" class="section level3">
-<h3>Exercise</h3>
+<div id="exercise-15-1" class="section level3">
+<h3>Exercise 15</h3>
 <pre class="sql"><code>SELECT
     *,
     CASE

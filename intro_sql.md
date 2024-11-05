@@ -49,7 +49,7 @@ SELECT * FROM patients; /* this is also a comment */
 SELECT * from patients; -- another single line comment
 ```
 
-### Exercise
+### Exercise 1
 
 Take a look at the schema of the database. Think about a query that you would like to be able to make at the end of this workshop. Write down that query and the steps that you think you would need to take using a comment.
 
@@ -82,7 +82,7 @@ A couple of notes:
 - SQL is case-insensitive, but many times you'll see the key terms in all caps. This is good practice for readability.
 - Note that you use a semicolon `;` to end the statement. This is the standard way to separate SQL statements in systems that allow for more that one statement to be executed in the same call. (With [sql-practice.com](https://www.sql-practice.com/) we don't have to worry about that.)
 
-### Exercise
+### Exercise 2
 
 Select the first\_name and last\_name columns from the patients table.
 
@@ -98,7 +98,7 @@ LIMIT 5;
 
 The order of the rows is not random, but it is not guaranteed to be in any particular order by default either. Be careful about this when "looking at the data."
 
-### Exercise
+### Exercise 3
 
 Select 10 rows from the patients table selecting the gender and birth\_date columns.
 
@@ -113,7 +113,7 @@ LIMIT 5
 OFFSET 2;
 ```
 
-### Exercise
+### Exercise 4
 
 Select 10 rows from the patients table selecting the gender and birth\_date columns, but skipping the first 5 rows.
 
@@ -151,7 +151,7 @@ WHERE gender = 'M' AND province_id = 'ON';
 | OR | Logical operator OR |
 | NOT | To negate boolean values |
 
-### Exercise
+### Exercise 5
 
 a) Select rows from the patients table where the city is Toronto.
 
@@ -169,7 +169,7 @@ FROM patients
 WHERE birth_date BETWEEN '1963-01-01' AND '2000-01-01';
 ```
 
-### Exercise
+### Exercise 6
 
 Select all the columns from the patients database where the height is between 160 and 180.
 
@@ -183,7 +183,7 @@ FROM patients
 WHERE city IN ('Barrie', 'Dundas', 'Hamilton');
 ```
 
-### Exercise
+### Exercise 7
 
 Select rows from the patients table where the first name is John, Jack, or Sam using `IN`.
 
@@ -211,7 +211,7 @@ WHERE allergies = NULL;
 
 Keep in mind that `NULL` values are omitted from the results of comparison tests. 
 
-### Exercise 
+### Exercise 8
 
 Select all the columns for the patients table where the birth\_date is null.
 
@@ -260,7 +260,7 @@ FROM patients
 ORDER BY height DESC, weight DESC;
 ```
 
-### Exercise
+### Exercise 9
 
 Order the rows in patients by province\_id and then by city.
 
@@ -284,7 +284,7 @@ FROM patients
 ORDER BY first_name;
 ```
 
-### Exercise
+### Exercise 10
 
 Using the admissions table, find the distinct dates where patients have been admitted.
 
@@ -349,7 +349,7 @@ SELECT COUNT(*)
 FROM patients;
 ```
 
-### Exercise
+### Exercise 11
 
 a) What are the allergies present in the patients table?
 b) How many people in the patients table have an allergy to penicillin?
@@ -376,7 +376,7 @@ GROUP BY first_name, last_name
 ORDER BY COUNT(*) DESC;
 ```
 
-### Exercise
+### Exercise 12
 
 Count the number of cities for each province\_id in the patients table.  Order the results by `COUNT(city)`.
 
@@ -392,7 +392,7 @@ HAVING COUNT(*) < 40
 ORDER BY COUNT(*) DESC;
 ```
 
-### Exercise
+### Exercise 13
 
 Select the province\_id from the patients table that have more than 20 cities associated with them.
 
@@ -407,7 +407,7 @@ GROUP BY first_name
 ORDER BY patient_count DESC;
 ```
 
-### Exercise
+### Exercise 14
 
 Using the patients table, find the number of patients by gender. Give the resulting column a descriptive title.
 
@@ -426,7 +426,7 @@ SELECT
 FROM patients;
 ```
 
-### Exercise
+### Exercise 15
 
 Select all columns from the table admissions. Add a column called admission\_year that takes the value of either 2018 or 2019 depending on the value of the column admission\_date.
 
@@ -440,14 +440,14 @@ One key aspect that this workshop didn't cover is how to connect to a database. 
 
 ## Answers to the exercises
 
-### Exercise
+### Exercise 2
 
 ```sql
 SELECT first_name, last_name
 FROM patients;
 ```
 
-### Exercise
+### Exercise 3
 
 ```sql
 SELECT gender, birth_date
@@ -455,7 +455,7 @@ FROM patients
 LIMIT 10;
 ```
 
-### Exercise
+### Exercise 4
 
 ```sql
 SELECT gender, birth_date
@@ -464,7 +464,7 @@ LIMIT 10
 OFFSET 5;
 ```
 
-### Exercise
+### Exercise 5
 
 a) 
 
@@ -490,7 +490,7 @@ FROM patients
 WHERE first_name LIKE 'd%';
 ```
 
-### Exercise
+### Exercise 6
 
 ```sql
 SELECT *
@@ -498,7 +498,7 @@ FROM patients
 WHERE height BETWEEN 160 AND 180;
 ```
 
-### Exercise
+### Exercise 7
 
 ```sql
 SELECT *
@@ -506,7 +506,7 @@ FROM patients
 WHERE first_name IN ('John', 'Jack', 'Sam');
 ```
 
-### Exercise
+### Exercise 8
 
 ```sql
 SELECT *
@@ -514,7 +514,7 @@ FROM patients
 WHERE birth_date IS NULL;
 ```
 
-### Exercise
+### Exercise 9
 
 ```sql
 SELECT *
@@ -522,14 +522,14 @@ FROM patients
 ORDER BY province_id, city;
 ```
 
-### Exercise
+### Exercise 10
 
 ```sql
 SELECT DISTINCT admission_date
 FROM admissions;
 ```
 
-### Exercise
+### Exercise 11
 
 a) 
 
@@ -548,7 +548,7 @@ FROM patients
 WHERE allergies = 'Penicillin';
 ```
 
-### Exercise
+### Exercise 12
 
 ```sql
 SELECT province_id, count(city)
@@ -557,7 +557,7 @@ GROUP BY province_id
 ORDER BY count(city);
 ```
 
-### Exercise
+### Exercise 13
 
 ```sql
 SELECT province_id
@@ -566,7 +566,7 @@ group by province_id
 HAVING count(city) > 20;
 ```
 
-### Exercise
+### Exercise 14
 
 ```sql
 SELECT gender, COUNT(gender) AS patient_count
@@ -574,7 +574,7 @@ FROM patients
 GROUP BY gender;
 ```
 
-### Exercise
+### Exercise 15
 
 ```sql
 SELECT
