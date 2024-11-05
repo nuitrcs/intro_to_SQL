@@ -17,10 +17,6 @@
 * [`HAVING`](#having)
 * [Aliasing](#aliasing)
 * [`CASE WHEN`](#case-when)
-* [Joins](#joins)
-* [Table Names and Aliases](#table-names-and-aliases)
-* [Subqueries](#subqueries)
-* [Common table expressions](#common-table-expressions-cte)
 * [Recap and resources to continue learning](#recap-and-resources-to-continue-learning)
 * [Answers to the exercises](#answers-to-the-exercises)
 
@@ -53,6 +49,10 @@ SELECT * FROM patients; /* this is also a comment */
 SELECT * from patients; -- another single line comment
 ```
 
+### Exercise
+
+Take a look at the schema of the database. Think about a query that you would like to be able to make at the end of this workshop. Write down that query and the steps that you think you would need to take using a comment.
+
 ## `SELECT`
 
 Select is the command we use most often in SQL.  It lets us select data (specified rows and columns) from one or more tables.  Columns are selected by name, rows are selected with conditional statements (values of a particular column meeting some criteria). 
@@ -82,7 +82,7 @@ A couple of notes:
 - SQL is case-insensitive, but many times you'll see the key terms in all caps. This is good practice for readability.
 - Note that you use a semicolon `;` to end the statement. This is the standard way to separate SQL statements in systems that allow for more that one statement to be executed in the same call. (With [sql-practice.com](https://www.sql-practice.com/) we don't have to worry about that.)
 
-### Exercise 1
+### Exercise
 
 Select the first\_name and last\_name columns from the patients table.
 
@@ -98,7 +98,7 @@ LIMIT 5;
 
 The order of the rows is not random, but it is not guaranteed to be in any particular order by default either. Be careful about this when "looking at the data."
 
-### Exercise 2
+### Exercise
 
 Select 10 rows from the patients table selecting the gender and birth\_date columns.
 
@@ -112,6 +112,10 @@ FROM patients
 LIMIT 5
 OFFSET 2;
 ```
+
+### Exercise
+
+Select 10 rows from the patients table selecting the gender and birth\_date columns, but skipping the first 5 rows.
 
 ## `WHERE`
 
@@ -130,7 +134,7 @@ You can combine conditions together with `AND` and `OR`:
 ```sql
 SELECT *
 FROM patients
-WHERE gender = 'M' AND allergies IS NULL;
+WHERE gender = 'M' AND province_id = 'ON';
 ```
 
 `WHERE` operators include:
@@ -147,7 +151,7 @@ WHERE gender = 'M' AND allergies IS NULL;
 | OR | Logical operator OR |
 | NOT | To negate boolean values |
 
-### Exercise 3
+### Exercise
 
 a) Select rows from the patients table where the city is Toronto.
 
@@ -164,6 +168,11 @@ SELECT *
 FROM patients
 WHERE birth_date BETWEEN '1963-01-01' AND '2000-01-01';
 ```
+
+### Exercise
+
+Select all the columns from the patients database where the height is between 160 and 180.
+
 ## `IN`
 
 `IN` lets you specify a lot of values that you would otherwise join together with an `OR` statement:
@@ -174,7 +183,7 @@ FROM patients
 WHERE city IN ('Barrie', 'Dundas', 'Hamilton');
 ```
 
-### Exercise 4
+### Exercise
 
 Select rows from the patients table where the first name is John, Jack, or Sam using `IN`.
 
@@ -201,6 +210,10 @@ WHERE allergies = NULL;
 ```
 
 Keep in mind that `NULL` values are omitted from the results of comparison tests. 
+
+### Exercise 
+
+Select all the columns for the patients table where the birth\_date is null.
 
 ## `ORDER BY`
 
@@ -247,7 +260,7 @@ FROM patients
 ORDER BY height DESC, weight DESC;
 ```
 
-### Exercise 5
+### Exercise
 
 Order the rows in patients by province\_id and then by city.
 
@@ -270,6 +283,10 @@ SELECT DISTINCT first_name, last_name
 FROM patients
 ORDER BY first_name;
 ```
+
+### Exercise
+
+Using the admissions table, find the distinct dates where patients have been admitted.
 
 ## Functions and Arithmetic
 
@@ -332,7 +349,7 @@ SELECT COUNT(*)
 FROM patients;
 ```
 
-### Exercise 6
+### Exercise
 
 a) What are the allergies present in the patients table?
 b) How many people in the patients table have an allergy to penicillin?
@@ -359,7 +376,7 @@ GROUP BY first_name, last_name
 ORDER BY COUNT(*) DESC;
 ```
 
-### Exercise 7
+### Exercise
 
 Count the number of cities for each province\_id in the patients table.  Order the results by `COUNT(city)`.
 
@@ -375,7 +392,7 @@ HAVING COUNT(*) < 40
 ORDER BY COUNT(*) DESC;
 ```
 
-### Exercise 8 
+### Exercise
 
 Select the province\_id from the patients table that have more than 20 cities associated with them.
 
@@ -390,6 +407,10 @@ GROUP BY first_name
 ORDER BY patient_count DESC;
 ```
 
+### Exercise
+
+Using the patients table, find the number of patients by gender. Give the resulting column a descriptive title.
+
 ## `CASE WHEN`
 
 `CASE WHEN` is a conditional statement that can be used to create new columns based on the values of other columns.  It's similar to an `if` statement in other programming languages.
@@ -399,167 +420,34 @@ SELECT
 	height,
     CASE
     	WHEN height < 160 THEN 'Small'
-        WHEN height between 160 and 180 THEN 'Medium'
+        WHEN height BETWEEN 160 AND 180 THEN 'Medium'
         ELSE 'Tall'
     END AS height_category
 FROM patients;
 ```
 
-## Joins
+### Exercise
 
-Looking at the database schema, we can see that information is split between four tables.  The lines between the tables show where there is a column in one table that is linked to a column in another table.  These are called foreign keys.  
-
-In the table names, there are key icons next to some columns.  These columns are primary key columns.  A primary key can be a single column or a combination of multiple columns.  Primary keys have to have unique values.  They are frequently used to link tables to each other (although you could link tables with other columns too), and they are also used to index a table, which among other things makes lookups (where conditions) on those columns faster.
-
-Now we'll learn how to join tables together. Diagrams such as [this one](https://images.app.goo.gl/U5RCPEhNaQuMn7y7A) can be useful to understand the different types of joins. Please note that you can join more than two tables together.
-
-### `INNER JOIN`
-
-The first and most common type of join is called an inner join.  You specify the tables to join, the conditions to use to match the tables up, and you get back the rows from both tables that meet the conditions.
-
-```sql
-SELECT *
-FROM patients
-INNER JOIN admissions ON patients.patient_id = admissions.patient_id;
-```
-
-Note that both tables have a column called patient\_id.  We add the table name to the front of the column name when referencing them. You can do this anytime, but typically only do it when you're joining and there's ambiguity. 
-
-We can also group by, order by, and use other where clause conditions on the joined tables.  
-
-### Exercise 9
-
-a) Join the patients table to the province\_names table.
-b) Join the admissions table to the doctors table.
-
-### Table Names and Aliases
-
-We can alias tables as well as columns.  If a column name appears in both tables, then we have to specify the table name when selecting it.
-
-```sql
-SELECT *
-FROM patients AS p
-INNER JOIN admissions AS a ON p.patient_id = a.patient_id;
-```
-
-and we often drop the `AS`:
-
-```sql 
-SELECT *
-FROM patients p
-INNER JOIN admissions a ON p.patient_id = a.patient_id;
-```
-
-### `LEFT JOIN`
-
-With an inner join, we only get the results that are in both tables.  But there are other types of joins.
-
-If we want to know which rows in a table don't have a match in the other table, we use a `LEFT JOIN` or `RIGHT JOIN` (depending on which table you want all of the results from).
-
-Notice the difference between these:
-
-```sql
-SELECT *
-FROM patients p
-LEFT JOIN admissions a ON p.patient_id = a.patient_id;
-```
-
-```sql
-SELECT *
-FROM admissions a
-RIGHT JOIN patients p ON p.patient_id = a.patient_id;
-```
-
-And this:
-
-```sql
-SELECT *
-FROM patients p
-RIGHT JOIN admissions a ON p.patient_id = a.patient_id;
-```
-
-### Exercise 10
-
-a) Select the patient\_id of patients attended by a cardiologist.
-b) Select the first and last name of patients who have been admitted, but don't have a diagnosis record.
-
-### `FULL OUTER JOIN`
-
-A `FULL OUTER JOIN` is like doing a left and right join at the same time: you get rows that are in both tables, plus rows from both tables that don't match the other table. This join is less commonly used. The syntax is the same as the other joins.
-
-# Bonus materials
-
-## Subqueries
-
-We can use the results of one query as values in another query. For example, we discussed above that this doesn't work: 
-
-```sql
-SELECT *
-FROM patients
-WHERE height = MAX(height);
-```
-You can use a subquery:
-
-```sql
-SELECT *
-FROM patients
-WHERE height = (SELECT MAX(HEIGHT) FROM patients);
-```
-
-The subquery is executed first, and then the result is used the broader query.
-
-We can also use subqueries with `IN`:
-
-```sql
-SELECT first_name, last_name
-FROM patients
-WHERE patient_id IN (
-  SELECT patient_id
-  FROM admissions
-  WHERE admission_date BETWEEN '2018-01-01' AND '2018-12-31'
-);
-```
-
-But you can also do the above query by joining tables together.  (`IN` is an expensive operation, meaning it can take a long time to run in large databases.)
-
-### Exercise 11
-
-Using subqueries, find the first\_name and last\_name of patients who have been attended by a cardiologist. (Hint: you may need to use more than two tables. The database schema is your friend!)
-
-## Common Table Expressions (CTE)
-
-CTE help simplify relatively complex queries. You can give a name to a result set and use that in a subsequent query. CTE can help make long subqueries more readable. They're particularly useful if you're using the same subquery multiple times.
-
-```sql
-WITH patients_2018 AS (
-  SELECT patient_id
-  FROM admissions
-  WHERE admission_date BETWEEN '2018-01-01' AND '2018-12-31'
-  )
-  
-SELECT first_name, last_name
-FROM patients
-WHERE patient_id IN patients_2018;
-```
-
-Please note that you can create several CTE by separating them with a comma.
+Select all columns from the table admissions. Add a column called admission\_year that takes the value of either 2018 or 2019 depending on the value of the column admission\_date.
 
 ## Recap and resources to continue learning
 
-This tutorial provided an introduction to SQL. While this is a good starting place, there are more things to learn! This tutorial draws from a longer [Introduction to databases workshop](https://github.com/nuitrcs/databases_workshop) taught by [Research Computing and Data Services at Northwestern University](https://www.it.northwestern.edu/departments/it-services-support/research/), as well as by this [resource guide](https://sites.northwestern.edu/researchcomputing/resource-guides/resource-guide-sql/). You can check them out to continue learning! 🧠💪
+This tutorial provided an introduction to SQL. While this is a good starting place, there are more things to learn! The [GitHub repository that hosts this introductory tutorial](https://github.com/nuitrcs/SQL_workshops) also includes an intermediate tutorial.
+
+This tutorial draws from a longer [introduction to databases workshop](https://github.com/nuitrcs/databases_workshop) taught by [Research Computing and Data Services at Northwestern University](https://www.it.northwestern.edu/departments/it-services-support/research/), as well as by this [resource guide](https://sites.northwestern.edu/researchcomputing/resource-guides/resource-guide-sql/). You can check them out to continue learning! 🧠💪
 
 One key aspect that this workshop didn't cover is how to connect to a database. We used [sql-practice.com](https://www.sql-practice.com/), which makes it very easy to run SQL in a web browser for an introductory workshop. But in research, you'll probably be connecting to a database from a programming language like R or Python. Here you can see [how to connect to a database using the `DBI` package in R](https://github.com/nuitrcs/databases_workshop/blob/master/r/r_databases.Rmd) and [how to connect to a database using the `psycopg2` package in Python](https://github.com/nuitrcs/databases_workshop/blob/master/python/postgresql_from_python.ipynb). If you are affiliated with Northwestern University and you run into a problem during your research, you can always [submit a consult request](https://services.northwestern.edu/TDClient/30/Portal/Requests/ServiceDet?ID=93).
 
 ## Answers to the exercises
 
-### Exercise 1
+### Exercise
 
 ```sql
 SELECT first_name, last_name
 FROM patients;
 ```
 
-### Exercise 2
+### Exercise
 
 ```sql
 SELECT gender, birth_date
@@ -567,7 +455,16 @@ FROM patients
 LIMIT 10;
 ```
 
-### Exercise 3
+### Exercise
+
+```sql
+SELECT gender, birth_date
+FROM patients
+LIMIT 10
+OFFSET 5;
+```
+
+### Exercise
 
 a) 
 
@@ -593,7 +490,15 @@ FROM patients
 WHERE first_name LIKE 'd%';
 ```
 
-### Exercise 4
+### Exercise
+
+```sql
+SELECT *
+FROM patients
+WHERE height BETWEEN 160 AND 180;
+```
+
+### Exercise
 
 ```sql
 SELECT *
@@ -601,7 +506,15 @@ FROM patients
 WHERE first_name IN ('John', 'Jack', 'Sam');
 ```
 
-### Exercise 5
+### Exercise
+
+```sql
+SELECT *
+FROM patients
+WHERE birth_date IS NULL;
+```
+
+### Exercise
 
 ```sql
 SELECT *
@@ -609,7 +522,14 @@ FROM patients
 ORDER BY province_id, city;
 ```
 
-### Exercise 6
+### Exercise
+
+```sql
+SELECT DISTINCT admission_date
+FROM admissions;
+```
+
+### Exercise
 
 a) 
 
@@ -628,7 +548,7 @@ FROM patients
 WHERE allergies = 'Penicillin';
 ```
 
-### Exercise 7
+### Exercise
 
 ```sql
 SELECT province_id, count(city)
@@ -637,7 +557,7 @@ GROUP BY province_id
 ORDER BY count(city);
 ```
 
-### Exercise 8
+### Exercise
 
 ```sql
 SELECT province_id
@@ -646,56 +566,22 @@ group by province_id
 HAVING count(city) > 20;
 ```
 
-### Exercise 9
-
-a)
+### Exercise
 
 ```sql
-SELECT *
-FROM patients 
-INNER JOIN province_names ON patients.province_id = province_names.province_id;
-```
-
-b)
-
-```sql
-SELECT *
-FROM admissions 
-INNER JOIN doctors ON admissions.attending_doctor_id = doctors.doctor_id;
-```
-
-### Exercise 10
-
-a)
-
-```sql
-SELECT a.patient_id
-FROM doctors d
-LEFT JOIN admissions a ON d.doctor_id = a.attending_doctor_id
-WHERE d.specialty = 'Cardiologist';
-```
-
-b)
-
-```sql
-SELECT p.first_name, p.last_name
-FROM admissions a
-RIGHT JOIN patients p ON a.patient_id = p.patient_id
-WHERE a.diagnosis IS NULL;
-```
-
-### Exercise 11
-
-```sql
-SELECT first_name, last_name
+SELECT gender, COUNT(gender) AS patient_count
 FROM patients
-WHERE patient_id IN (
-  SELECT patient_id
-  FROM admissions
-  WHERE attending_doctor_id IN (
-    SELECT doctor_id
-    FROM doctors
-    WHERE specialty = 'Cardiologist'
-    )
-  );
+GROUP BY gender;
+```
+
+### Exercise
+
+```sql
+SELECT
+	*,
+    CASE
+    	WHEN admission_date < '2019-01-01' THEN '2018'
+        ELSE '2019'
+    END AS admission_year
+FROM admissions;
 ```
